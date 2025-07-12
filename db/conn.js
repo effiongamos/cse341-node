@@ -8,10 +8,10 @@ let db;
 async function connectToDatabase() {
   try {
     await client.connect();
-    db = client.db(); // uses contactsDB from URI
-    console.log('Connected to MongoDB');
+    db = client.db(); // uses the DB in URI
+    console.log('✅ Connected to MongoDB');
   } catch (err) {
-    console.error(err);
+    console.error('❌ DB connection error:', err);
   }
 }
 
