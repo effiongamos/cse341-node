@@ -1,27 +1,22 @@
 const { MongoClient } = require('mongodb');
 const dotenv = require('dotenv');
-
 dotenv.config();
 
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
 let db;
+
+const client = new MongoClient(process.env.MONGODB_URI);
 
 async function connectToDatabase() {
   try {
     await client.connect();
-    db = client.db(); // uses the DB name from the URI
+    db = client.db('contactsDB');
     console.log('Connected to MongoDB');
-  } catch (err) {
-    console.error('Database connection failed:', err.message);
-    process.exit(1);
+  } catch (error) {
+    console.error(error);
   }
 }
 
 function getDb() {
-  if (!db) {
-    throw new Error('No database connection');
-  }
   return db;
 }
 
