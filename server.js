@@ -16,7 +16,7 @@ app.use(express.json());
 // Connect to DB then start server
 db.connectToServer((err) => {
   if (err) {
-    console.error("❌ Failed to connect to database:", err);
+    console.error("Failed to connect to database:", err);
     process.exit();
   }
 
@@ -25,6 +25,6 @@ db.connectToServer((err) => {
 
   // Start server
   app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
   });
 });
