@@ -1,20 +1,30 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const contactsRoutes = require('./routes/contacts');
-
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
 dotenv.config();
-const app = express();
-const port = process.env.PORT || 3000;
 
+const db = require("./db/conn"); // DB connection logic
+const contactsRoutes = require("./routes/contacts");
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
 app.use(cors());
 app.use(express.json());
-app.use('/contacts', contactsRoutes);
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true, useUnifiedTopology: true
-}).then(() => {
-  console.log('MongoDB connected');
-  app.listen(port, () => console.log(`Server running on port ${port}`));
-}).catch(err => console.error(err));
+// Connect to DB then start server
+db.connectToServer((err) => {
+  if (err) {
+    console.error("❌ Failed to connect to database:", err);
+    process.exit();
+  }
+
+  // Routes
+  app.use("/contacts", contactsRoutes);
+
+  // Start server
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+});
