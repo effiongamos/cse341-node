@@ -23,6 +23,11 @@ db.connectToServer((err) => {
   // Routes
   app.use("/contacts", contactsRoutes);
 
+  //  Root route
+  app.get("/", (req, res) => {
+    res.send("Hello World!  Welcome to the Contacts API. Use /contacts to access the API.");
+  });
+
   // Start server
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
