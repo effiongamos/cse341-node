@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+
 dotenv.config();
 
-const db = require("./db/conn"); // DB connection logic
 const contactsRoutes = require("./routes/contacts");
 
 const app = express();
@@ -13,23 +14,28 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Connect to DB then start server
-db.connectToServer((err) => {
-  if (err) {
-    console.error("Failed to connect to database:", err);
-    process.exit();
-  }
+// Connect to MongoDB using Mongoose
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log("Connected to MongoDB with Mongoose!");
 
   // Routes
   app.use("/contacts", contactsRoutes);
 
-  //  Root route
   app.get("/", (req, res) => {
-    res.send("Welcome to the Contacts API. Use /contacts to access the API.");
+    res.send("Welcome to the Contacts API. Use /contacts to access the API data.");
   });
 
-  // Start server
+  // Start server after DB connects
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
+})
+.catch((err) => {
+  console.error("Failed to connect to MongoDB:", err);
 });
+
+
