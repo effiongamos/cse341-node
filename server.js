@@ -25,7 +25,7 @@ db.connectToServer((err) => {
 
   //  Root route
   app.get("/", (req, res) => {
-    res.send("Hello World!  Welcome to the Contacts API. Use /contacts to access the API.");
+    res.send("Welcome to the Contacts API. Use /contacts to access the API.");
   });
 
   // Start server
