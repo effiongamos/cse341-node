@@ -5,8 +5,12 @@
     "version": "1.0.0"
   },
   "host": "project-week1.onrender.com",
+  "description": "API for managing contacts",
   "basePath": "/",
-  "schemes": ["https"],
+  "schemes": [
+    "http",
+    "https"
+  ],
   "paths": {
     "/contacts": {
       "get": {
