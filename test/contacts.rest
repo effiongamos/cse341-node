@@ -1,0 +1,28 @@
+### Get all contacts
+GET https://project-week1.onrender.com/contacts
+
+### Get contact by ID
+GET https://project-week1.onrender.com/contacts/687297f76816cd13cd4f019a
+
+### Create contact
+POST https://project-week1.onrender.com/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Benjamin",
+  "lastName": "Effiong",
+  "email": "ben@gmail.com",
+  "favoriteColor": "Blue",
+  "birthday": "1999-04-06"
+}
+
+### Update contact
+PUT https://project-week1.onrender.com/contacts/687298e3fbe8927d986a9663
+Content-Type: application/json
+
+{
+  "favoriteColor": "Red"
+}
+
+### Delete contact
+DELETE https://project-week1.onrender.com/contacts/6872983e6816cd13cd4f019b
