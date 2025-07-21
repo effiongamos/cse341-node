@@ -12,50 +12,24 @@
       "get": {
         "summary": "Get all contacts",
         "responses": {
-          "200": { "description": "OK" }
+          "200": {
+            "description": "A list of contacts",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Contact"
+              }
+            }
+          }
         }
       },
       "post": {
-        "summary": "Create new contact",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/Contact"
-          }
-        }],
-        "responses": {
-          "201": { "description": "Created" }
-        }
-      }
-    },
-    "/contacts/{id}": {
-      "get": {
-        "summary": "Get contact by ID",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }],
-        "responses": {
-          "200": { "description": "OK" },
-          "404": { "description": "Not Found" }
-        }
-      },
-      "put": {
-        "summary": "Update contact",
+        "summary": "Create a new contact",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "in": "body",
             "name": "body",
+            "description": "Contact object to create",
             "required": true,
             "schema": {
               "$ref": "#/definitions/Contact"
@@ -63,19 +37,77 @@
           }
         ],
         "responses": {
-          "200": { "description": "Updated" }
+          "201": {
+            "description": "Contact created successfully"
+          }
+        }
+      }
+    },
+    "/contacts/{id}": {
+      "get": {
+        "summary": "Get a contact by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the contact to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Contact"
+            }
+          },
+          "404": {
+            "description": "Contact not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a contact",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the contact to update"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated contact object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Contact"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact updated successfully"
+          }
         }
       },
       "delete": {
-        "summary": "Delete contact",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }],
+        "summary": "Delete a contact",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the contact to delete"
+          }
+        ],
         "responses": {
-          "200": { "description": "Deleted" }
+          "200": {
+            "description": "Contact deleted successfully"
+          }
         }
       }
     }
@@ -83,12 +115,28 @@
   "definitions": {
     "Contact": {
       "type": "object",
+      "required": ["firstName", "lastName", "email", "favoriteColor", "birthday"],
       "properties": {
-        "firstName": { "type": "string" },
-        "lastName": { "type": "string" },
-        "email": { "type": "string" },
-        "favoriteColor": { "type": "string" },
-        "birthday": { "type": "string" }
+        "firstName": {
+          "type": "string",
+          "example": "John"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "john.doe@example.com"
+        },
+        "favoriteColor": {
+          "type": "string",
+          "example": "Blue"
+        },
+        "birthday": {
+          "type": "string",
+          "example": "1990-01-01"
+        }
       }
     }
   }
