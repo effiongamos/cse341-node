@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Contacts API 2",
+    "title": "Contacts & Users API",
     "version": "1.0.0"
   },
   "host": "project-week1.onrender.com",
@@ -16,14 +16,12 @@
         }
       },
       "post": {
-        "summary": "Create new contact",
+        "summary": "Create a new contact",
         "parameters": [{
           "in": "body",
           "name": "body",
           "required": true,
-          "schema": {
-            "$ref": "#/definitions/Contact"
-          }
+          "schema": { "$ref": "#/definitions/Contact" }
         }],
         "responses": {
           "201": { "description": "Created" }
@@ -32,7 +30,7 @@
     },
     "/contacts/{id}": {
       "get": {
-        "summary": "Get contact by ID",
+        "summary": "Get a contact by ID",
         "parameters": [{
           "name": "id",
           "in": "path",
@@ -45,7 +43,7 @@
         }
       },
       "put": {
-        "summary": "Update contact",
+        "summary": "Update a contact",
         "parameters": [
           {
             "name": "id",
@@ -57,9 +55,7 @@
             "in": "body",
             "name": "body",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/Contact"
-            }
+            "schema": { "$ref": "#/definitions/Contact" }
           }
         ],
         "responses": {
@@ -67,7 +63,7 @@
         }
       },
       "delete": {
-        "summary": "Delete contact",
+        "summary": "Delete a contact",
         "parameters": [{
           "name": "id",
           "in": "path",
@@ -75,7 +71,74 @@
           "type": "string"
         }],
         "responses": {
-          "200": { "description": "Deleted" }
+          "204": { "description": "Deleted" }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get all users",
+        "responses": {
+          "200": { "description": "OK" }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": { "$ref": "#/definitions/User" }
+        }],
+        "responses": {
+          "201": { "description": "Created" }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Get a user by ID",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" }
+        }
+      },
+      "put": {
+        "summary": "Update a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/User" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Updated" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "204": { "description": "Deleted" }
         }
       }
     }
@@ -88,7 +151,19 @@
         "lastName": { "type": "string" },
         "email": { "type": "string" },
         "favoriteColor": { "type": "string" },
-        "birthday": { "type": "string" }
+        "birthday": { "type": "string", "format": "date" }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "role": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "isActive": { "type": "boolean" },
+        "lastLogin": { "type": "string", "format": "date-time" }
       }
     }
   }
