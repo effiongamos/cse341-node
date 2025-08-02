@@ -30,7 +30,7 @@ exports.createContact = async (req, res) => {
 
     // Check required fields
     if (!firstName || !lastName || !email) {
-      return res.status(400).json({ message: 'firstName, lastName, and email are required.' });
+      return res.status(400).json({ message: 'firstName, lastName, email, favoritecolor and birthday are required to update.' });
     }
 
     const contact = new Contact(req.body);
@@ -48,7 +48,7 @@ exports.updateContact = async (req, res) => {
 
     // Validate input
     if (!firstName || !lastName || !email) {
-      return res.status(400).json({ message: 'firstName, lastName, and email are required to update.' });
+      return res.status(400).json({ message: 'firstName, lastName, email, favoritecolor and birthday are required to update.' });
     }
 
     const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });

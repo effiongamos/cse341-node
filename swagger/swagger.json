@@ -203,41 +203,37 @@
     "schemas": {
       "Contact": {
         "type": "object",
-        "required": ["firstName", "lastName", "email"],
+        "required": ["firstName", "lastName", "email", "favoritecolor", "birthday"],
         "properties": {
           "firstName": {
-            "type": "string",
-            "example": "John"
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "example": "Doe"
+            "type": "string"
           },
           "email": {
-            "type": "string",
-            "example": "john@example.com"
+            "type": "string"
           },
-          "phone": {
-            "type": "string",
-            "example": "123-456-7890"
+          "favoritecolor": {
+            "type": "string"
+          },
+            "birthday": {
+             "type": "string"
           }
         }
       },
       "User": {
         "type": "object",
-        "required": ["username", "email"],
+        "required": ["username", "email", "role"],
         "properties": {
           "username": {
-            "type": "string",
-            "example": "benjamin123"
+            "type": "string"
           },
           "email": {
-            "type": "string",
-            "example": "benjamin@example.com"
+            "type": "string"
           },
           "role": {
-            "type": "string",
-            "example": "admin"
+            "type": "string"
           }
         }
       }
