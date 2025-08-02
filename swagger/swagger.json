@@ -203,7 +203,7 @@
     "schemas": {
       "Contact": {
         "type": "object",
-        "required": ["firstName", "lastName", "email", "favoritecolor", "birthday"],
+        "required": ["firstName", "lastName", "email", "favoriteColor", "birthday"],
         "properties": {
           "firstName": {
             "type": "string"
