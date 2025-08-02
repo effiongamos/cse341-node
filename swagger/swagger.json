@@ -1,34 +1,51 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
-    "title": "Contacts & Users API",
-    "description": "API for managing contacts and users",
-    "version": "1.0.0"
+    "title": "Contacts and Users API",
+    "version": "1.0.0",
+    "description": "API for managing contacts and users with CRUD operations."
   },
-  "host": "project-week1.onrender.com",
-  "basePath": "/",
-  "schemes": ["https"],
+  "servers": [
+    {
+      "url": "https://project-week1.onrender.com",
+      "description": "Production server"
+    }
+  ],
   "paths": {
     "/contacts": {
       "get": {
         "summary": "Get all contacts",
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "List of all contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Contact" }
+                }
+              }
+            }
+          }
         }
       },
       "post": {
         "summary": "Create a new contact",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": { "$ref": "#/definitions/Contact" }
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Contact" }
+            }
           }
-        ],
+        },
         "responses": {
-          "201": { "description": "Contact created" },
-          "400": { "description": "Bad Request - Missing required fields" }
+          "201": {
+            "description": "Contact created successfully"
+          },
+          "400": {
+            "description": "Bad request – missing or invalid fields"
+          }
         }
       }
     },
@@ -40,7 +57,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -49,24 +66,26 @@
         }
       },
       "put": {
-        "summary": "Update a contact by ID",
+        "summary": "Update contact by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": { "$ref": "#/definitions/Contact" }
+            "schema": { "type": "string" }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Contact" }
+            }
+          }
+        },
         "responses": {
-          "200": { "description": "Contact updated" },
-          "400": { "description": "Bad Request - Invalid data or missing fields" },
+          "200": { "description": "Contact updated successfully" },
+          "400": { "description": "Invalid request body" },
           "404": { "description": "Contact not found" }
         }
       },
@@ -77,7 +96,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -90,22 +109,36 @@
       "get": {
         "summary": "Get all users",
         "responses": {
-          "200": { "description": "Users retrieved" }
+          "200": {
+            "description": "List of all users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/User" }
+                }
+              }
+            }
+          }
         }
       },
       "post": {
         "summary": "Create a new user",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": { "$ref": "#/definitions/User" }
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/User" }
+            }
           }
-        ],
+        },
         "responses": {
-          "201": { "description": "User created" },
-          "400": { "description": "Bad Request - Missing required fields" }
+          "201": {
+            "description": "User created successfully"
+          },
+          "400": {
+            "description": "Bad request – missing or invalid fields"
+          }
         }
       }
     },
@@ -117,7 +150,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -132,18 +165,20 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "schema": { "$ref": "#/definitions/User" }
+            "schema": { "type": "string" }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/User" }
+            }
+          }
+        },
         "responses": {
-          "200": { "description": "User updated" },
-          "400": { "description": "Bad Request - Invalid data or missing fields" },
+          "200": { "description": "User updated successfully" },
+          "400": { "description": "Invalid request body" },
           "404": { "description": "User not found" }
         }
       },
@@ -154,7 +189,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -164,29 +199,47 @@
       }
     }
   },
-  "definitions": {
-    "Contact": {
-      "type": "object",
-      "required": ["firstName", "lastName", "email"],
-      "properties": {
-        "firstName": { "type": "string" },
-        "lastName": { "type": "string" },
-        "email": { "type": "string", "format": "email" },
-        "favoriteColor": { "type": "string" },
-        "birthday": { "type": "string", "format": "date" }
-      }
-    },
-    "User": {
-      "type": "object",
-      "required": ["username", "email", "password"],
-      "properties": {
-        "username": { "type": "string" },
-        "email": { "type": "string", "format": "email" },
-        "password": { "type": "string" },
-        "role": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "isActive": { "type": "boolean" },
-        "lastLogin": { "type": "string", "format": "date-time" }
+  "components": {
+    "schemas": {
+      "Contact": {
+        "type": "object",
+        "required": ["firstName", "lastName", "email"],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "123-456-7890"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": ["username", "email"],
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "benjamin123"
+          },
+          "email": {
+            "type": "string",
+            "example": "benjamin@example.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          }
+        }
       }
     }
   }
