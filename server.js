@@ -27,7 +27,7 @@ app.use("/users", usersRoutes);
 
 // Home route
 app.get("/", (req, res) => {
-  res.send("Welcome to the Contacts API. Use /contacts and /api-docs");
+  res.send("Welcome to the Contacts and Users API. Use /contacts, /users  and /api-docs");
 });
 
 mongoose.connect(process.env.MONGODB_URI)
