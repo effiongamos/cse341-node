@@ -2,6 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Contacts & Users API",
+    "description": "API for managing contacts and users",
     "version": "1.0.0"
   },
   "host": "project-week1.onrender.com",
@@ -12,38 +13,43 @@
       "get": {
         "summary": "Get all contacts",
         "responses": {
-          "200": { "description": "OK" }
+          "200": { "description": "Success" }
         }
       },
       "post": {
         "summary": "Create a new contact",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "required": true,
-          "schema": { "$ref": "#/definitions/Contact" }
-        }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Contact" }
+          }
+        ],
         "responses": {
-          "201": { "description": "Created" }
+          "201": { "description": "Contact created" },
+          "400": { "description": "Bad Request - Missing required fields" }
         }
       }
     },
     "/contacts/{id}": {
       "get": {
-        "summary": "Get a contact by ID",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }],
+        "summary": "Get contact by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "200": { "description": "OK" },
-          "404": { "description": "Not Found" }
+          "200": { "description": "Contact found" },
+          "404": { "description": "Contact not found" }
         }
       },
       "put": {
-        "summary": "Update a contact",
+        "summary": "Update a contact by ID",
         "parameters": [
           {
             "name": "id",
@@ -59,19 +65,24 @@
           }
         ],
         "responses": {
-          "200": { "description": "Updated" }
+          "200": { "description": "Contact updated" },
+          "400": { "description": "Bad Request - Invalid data or missing fields" },
+          "404": { "description": "Contact not found" }
         }
       },
       "delete": {
-        "summary": "Delete a contact",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }],
+        "summary": "Delete contact by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "204": { "description": "Deleted" }
+          "204": { "description": "Contact deleted" },
+          "404": { "description": "Contact not found" }
         }
       }
     },
@@ -79,38 +90,43 @@
       "get": {
         "summary": "Get all users",
         "responses": {
-          "200": { "description": "OK" }
+          "200": { "description": "Users retrieved" }
         }
       },
       "post": {
         "summary": "Create a new user",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "required": true,
-          "schema": { "$ref": "#/definitions/User" }
-        }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/User" }
+          }
+        ],
         "responses": {
-          "201": { "description": "Created" }
+          "201": { "description": "User created" },
+          "400": { "description": "Bad Request - Missing required fields" }
         }
       }
     },
     "/users/{id}": {
       "get": {
-        "summary": "Get a user by ID",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }],
+        "summary": "Get user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "200": { "description": "OK" },
-          "404": { "description": "Not Found" }
+          "200": { "description": "User found" },
+          "404": { "description": "User not found" }
         }
       },
       "put": {
-        "summary": "Update a user",
+        "summary": "Update user by ID",
         "parameters": [
           {
             "name": "id",
@@ -126,19 +142,24 @@
           }
         ],
         "responses": {
-          "200": { "description": "Updated" }
+          "200": { "description": "User updated" },
+          "400": { "description": "Bad Request - Invalid data or missing fields" },
+          "404": { "description": "User not found" }
         }
       },
       "delete": {
-        "summary": "Delete a user",
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }],
+        "summary": "Delete user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "204": { "description": "Deleted" }
+          "204": { "description": "User deleted" },
+          "404": { "description": "User not found" }
         }
       }
     }
@@ -146,19 +167,21 @@
   "definitions": {
     "Contact": {
       "type": "object",
+      "required": ["firstName", "lastName", "email"],
       "properties": {
         "firstName": { "type": "string" },
         "lastName": { "type": "string" },
-        "email": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
         "favoriteColor": { "type": "string" },
         "birthday": { "type": "string", "format": "date" }
       }
     },
     "User": {
       "type": "object",
+      "required": ["username", "email", "password"],
       "properties": {
         "username": { "type": "string" },
-        "email": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
         "password": { "type": "string" },
         "role": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" },
