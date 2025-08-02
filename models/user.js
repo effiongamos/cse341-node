@@ -12,14 +12,11 @@ const userSchema = new mongoose.Schema({
     match: /.+\@.+\..+/,
     unique: true
   },
-  password: {
-    type: String,
-    required: true
-  },
+
   role: {
     type: String,
     enum: ['admin', 'member', 'guest'],
-    default: 'member'
+    default: 'me'
   },
   bio: {
     type: String,
