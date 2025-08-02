@@ -26,10 +26,10 @@ exports.getContactById = async (req, res) => {
 // POST /contacts - Create a new contact
 exports.createContact = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone } = req.body;
+    const { firstName, lastName, email, favoritecolor, birthday } = req.body;
 
     // Check required fields
-    if (!firstName || !lastName || !email) {
+    if (!firstName || !lastName || !email || !favoritecolor || !birthday) {
       return res.status(400).json({ message: 'firstName, lastName, email, favoritecolor and birthday are required to update.' });
     }
 
@@ -44,10 +44,10 @@ exports.createContact = async (req, res) => {
 // PUT /contacts/:id - Update a contact by ID
 exports.updateContact = async (req, res) => {
   try {
-    const { firstName, lastName, email } = req.body;
+    const { firstName, lastName, email, favoritecolor, birthday } = req.body;
 
     // Validate input
-    if (!firstName || !lastName || !email) {
+    if (!firstName || !lastName || !email || !favoritecolor || !birthday) {
       return res.status(400).json({ message: 'firstName, lastName, email, favoritecolor and birthday are required to update.' });
     }
 
