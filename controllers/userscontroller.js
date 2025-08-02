@@ -24,10 +24,10 @@ exports.getUserById = async (req, res) => {
 // POST /users - Create a new user
 exports.createUser = async (req, res) => {
   try {
-    const { name, email, role } = req.body;
+    const { username, email, role } = req.body;
 
-    if (!name || !email || !role) {
-      return res.status(400).json({ message: 'name, email, and role are required.' });
+    if (!username || !email || !role) {
+      return res.status(400).json({ message: 'username, email, and role are required.' });
     }
 
     const user = new User(req.body);
@@ -41,10 +41,10 @@ exports.createUser = async (req, res) => {
 // PUT /users/:id - Update a user
 exports.updateUser = async (req, res) => {
   try {
-    const { name, email, role } = req.body;
+    const { username, email, role } = req.body;
 
-    if (!name || !email || !role) {
-      return res.status(400).json({ message: 'name, email, and role are required to update.' });
+    if (!username || !email || !role) {
+      return res.status(400).json({ message: 'username, email, and role are required to update.' });
     }
 
     const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });

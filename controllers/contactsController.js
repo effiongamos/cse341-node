@@ -6,7 +6,7 @@ exports.getAllContacts = async (req, res) => {
     const contacts = await Contact.find();
     res.status(200).json(contacts);
   } catch (err) {
-    res.status(500).json({ message: "Server error while fetching contacts." });
+    res.status(500).json({ message: 'Server error while fetching contacts.' });
   }
 };
 
@@ -28,9 +28,10 @@ exports.createContact = async (req, res) => {
   try {
     const { firstName, lastName, email, favoriteColor, birthday } = req.body;
 
-    // Check required fields
     if (!firstName || !lastName || !email || !favoriteColor || !birthday) {
-      return res.status(400).json({ message: 'firstName, lastName, email, favoriteColor and birthday are required to update.' });
+      return res.status(400).json({
+        message: 'firstName, lastName, email, favoriteColor, and birthday are required.'
+      });
     }
 
     const contact = new Contact(req.body);
@@ -41,17 +42,43 @@ exports.createContact = async (req, res) => {
   }
 };
 
-// PUT /contacts/:id - Update a contact by ID
+// PUT /contacts/:id - Full update (replace contact)
 exports.updateContact = async (req, res) => {
   try {
     const { firstName, lastName, email, favoriteColor, birthday } = req.body;
 
-    // Validate input
     if (!firstName || !lastName || !email || !favoriteColor || !birthday) {
-      return res.status(400).json({ message: 'firstName, lastName, email, favoriteColor and birthday are required to update.' });
+      return res.status(400).json({
+        message: 'All fields (firstName, lastName, email, favoriteColor, birthday) are required for full update.'
+      });
     }
 
-    const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedContact = await Contact.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Contact not found.' });
+    }
+
+    res.status(200).json(updatedContact);
+  } catch (err) {
+    res.status(400).json({ message: 'Invalid request or ID.' });
+  }
+};
+
+// PATCH /contacts/:id - Partial update
+exports.patchContact = async (req, res) => {
+  try {
+    const updates = req.body;
+
+    const contact = await Contact.findByIdAndUpdate(
+      req.params.id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
 
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found.' });
@@ -63,7 +90,7 @@ exports.updateContact = async (req, res) => {
   }
 };
 
-// DELETE /contacts/:id - Delete a contact by ID
+// DELETE /contacts/:id - Delete a contact
 exports.deleteContact = async (req, res) => {
   try {
     const contact = await Contact.findByIdAndDelete(req.params.id);
