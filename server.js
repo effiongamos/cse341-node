@@ -5,6 +5,8 @@ const passport = require('passport');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDoc = require('./swagger/swagger.json');
 const connectDB = require('./config/db');
+const passportConfig = require('./config/passport');
+const mongoose = require('mongoose');
 
 // Init app
 const app = express();
@@ -29,7 +31,7 @@ app.use(passport.session());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 // Routes
-app.use('/auth', require('./routes/authRoutes'));
+app.use('/auth', require('./routes/auth'));
 app.use('/users', require('./routes/users'));
 app.use('/contacts', require('./routes/contacts'));
 
