@@ -1,4 +1,4 @@
-const Contact = require('../models/Contact');
+const Contact = require('../models/contact');
 
 // GET /contacts - Get all contacts for the authenticated user
 exports.getContacts = async (req, res) => {
@@ -15,7 +15,7 @@ exports.addContact = async (req, res) => {
   try {
     const { firstName, lastName, email, favoriteColor, birthday } = req.body;
 
-    const contact = new Contact({
+    const contact = new contact({
       firstName,
       lastName,
       email,
