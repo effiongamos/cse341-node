@@ -1,8 +1,17 @@
+// routes/contacts.js
 const express = require('express');
 const router = express.Router();
-const contactController = require('../controllers/contactsController');
+const { verifyToken } = require('../middleware/auth');
+const Contact = require('../models/contact'); // <-- import the model
 
-router.post('/', contactController.createContact);
-// other routes...
+// GET /contacts - Get all contacts for authenticated user
+router.get('/', verifyToken, async (req, res) => {
+  try {
+    const contacts = await Contact.find({ userId: req.user.userId });
+    res.json(contacts);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 module.exports = router;
