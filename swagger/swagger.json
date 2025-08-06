@@ -63,30 +63,42 @@
       }
     },
     "/users/me": {
-      "get": {
-        "summary": "Get current user profile (requires token)",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User profile returned",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
+  "get": {
+    "summary": "Get current user profile (requires token)",
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Authorization",
+        "in": "header",
+        "description": "Bearer access token (e.g., Bearer YOUR_TOKEN_HERE)",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "Bearer eyJhbGciOiJIUzI1NiIsInR..."
         }
       }
-    },
+    ],
+    "responses": {
+      "200": {
+        "description": "User profile returned",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized - Token missing or invalid"
+      }
+    }
+  }
+},
     "/contacts": {
       "get": {
         "summary": "Get all contacts for authenticated user",
