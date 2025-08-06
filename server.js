@@ -7,6 +7,8 @@ const swaggerDoc = require('./swagger/swagger.json');
 const connectDB = require('./config/db');
 const passportConfig = require('./config/passport');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Init app
 const app = express();
