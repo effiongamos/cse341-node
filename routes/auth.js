@@ -13,7 +13,7 @@ router.get('/google/callback',
       user: {
         id: req.user._id,
         email: req.user.email,
-        name: req.user.name,
+        username: req.user.username,
       }
     });
   });

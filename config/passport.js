@@ -22,7 +22,7 @@ module.exports = function(passportInstance) {
       if (!user) {
         user = new User({
           googleId: profile.id,
-          displayName: profile.displayName,
+          displayusername: profile.displayuswername,
           email: profile.emails[0].value,
         });
         await user.save();
