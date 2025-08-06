@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   googleId: String
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('user', userSchema);
 
 
 
