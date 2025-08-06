@@ -5,19 +5,19 @@ const bcrypt = require('bcrypt');
 // POST /users/register
 exports.register = async (req, res) => {
   try {
-    const { email, password, name, role } = req.body;
+    const { email, password, username, role } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already registered' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, password: hashedPassword, name, role });
+    const user = await User.create({ email, password: hashedPassword, username, role });
 
     res.status(201).json({
       message: 'User registered',
       user: {
         id: user._id,
-        name: user.name,
+        username: user.username,
         email: user.email,
         role: user.role
       }
@@ -47,7 +47,7 @@ exports.login = async (req, res) => {
       token,
       user: {
         id: user._id,
-        name: user.name,
+        username: user.username,
         email: user.email,
         role: user.role
       }
@@ -65,7 +65,7 @@ exports.getProfile = async (req, res) => {
 
     res.status(200).json({
       id: user._id,
-      name: user.name,
+      username: user.name,
       email: user.email,
       role: user.role
     });
@@ -92,7 +92,7 @@ exports.getUserById = async (req, res) => {
 
     res.status(200).json({
       id: user._id,
-      name: user.name,
+      username: user.username,
       email: user.email,
       role: user.role
     });
@@ -104,11 +104,11 @@ exports.getUserById = async (req, res) => {
 // PUT /users/:id
 exports.updateUser = async (req, res) => {
   try {
-    const { name, email, role } = req.body;
+    const { username, email, role } = req.body;
 
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { name, email, role },
+      { username, email, role },
       { new: true, runValidators: true }
     ).select('-password');
 
@@ -118,7 +118,7 @@ exports.updateUser = async (req, res) => {
       message: 'User updated',
       user: {
         id: user._id,
-        name: user.name,
+        username: user.username,
         email: user.email,
         role: user.role
       }
