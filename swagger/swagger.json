@@ -10,6 +10,11 @@
       "url": "https://project-week1.onrender.com"
     }
   ],
+  "security": [   
+    {
+      "bearerAuth": []
+    }
+  ],
   "paths": {
     "/users/register": {
       "post": {
@@ -85,6 +90,11 @@
     "/contacts": {
       "get": {
         "summary": "Get all contacts for authenticated user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of user contacts",
@@ -103,6 +113,11 @@
       },
       "post": {
         "summary": "Create a new contact",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -126,6 +141,11 @@
     "/contacts/{id}": {
       "get": {
         "summary": "Get contact by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -147,6 +167,11 @@
       },
       "put": {
         "summary": "Update contact by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -181,6 +206,11 @@
       },
       "delete": {
         "summary": "Delete contact by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -204,6 +234,11 @@
     "/users/{id}": {
       "get": {
         "summary": "Get user by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -225,6 +260,11 @@
       },
       "put": {
         "summary": "Update user by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -259,6 +299,11 @@
       },
       "delete": {
         "summary": "Delete user by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
