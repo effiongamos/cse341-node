@@ -11,7 +11,7 @@ exports.getContacts = async (req, res) => {
 };
 
 // POST /contacts - Add a new contact
-exports.addContact = async (req, res) => {
+exports.createContact = async (req, res) => {
   try {
     const { firstName, lastName, email, favoriteColor, birthday } = req.body;
 
