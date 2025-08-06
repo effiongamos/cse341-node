@@ -74,7 +74,7 @@
       {
         "name": "Authorization",
         "in": "header",
-        "description": "Bearer access token (e.g., Bearer YOUR_TOKEN_HERE)",
+        "description": "Bearer access token",
         "required": true,
         "schema": {
           "type": "string",
