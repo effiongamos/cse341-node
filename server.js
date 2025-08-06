@@ -1,42 +1,43 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const mongoose = require("mongoose");
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger/swagger.json");
+require('dotenv').config();
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDoc = require('./swagger/swagger.json');
+const connectDB = require('./config/db');
 
-dotenv.config();
-
+// Init app
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Connect to MongoDB
+connectDB();
+
+// Passport config
+require('./config/passport')(passport);
+
+// Middleware
 app.use(express.json());
+app.use(session({
+  secret: process.env.JWT_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-// Swagger route
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
+// Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 // Routes
-const contactsRoutes = require("./routes/contacts");
-const usersRoutes = require("./routes/users");
+app.use('/auth', require('./routes/authRoutes'));
+app.use('/users', require('./routes/users'));
+app.use('/contacts', require('./routes/contacts'));
 
-app.use("/contacts", contactsRoutes);
-app.use("/users", usersRoutes);
-
-
-// Home route
-app.get("/", (req, res) => {
-  res.send("Welcome to the Contacts and Users API. Use /contacts, /users  and /api-docs");
+// Home
+app.get('/', (req, res) => {
+  res.send('Welcome to the Contact and User Management API. Visit /api-docs');
 });
 
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("Connected to MongoDB with Mongoose!");
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("Failed to connect to MongoDB:", err);
-  });
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

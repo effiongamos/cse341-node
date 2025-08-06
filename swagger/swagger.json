@@ -3,7 +3,7 @@
   "info": {
     "title": "Contacts and Users API",
     "version": "1.0.0",
-    "description": "API for managing contacts and users with CRUD operations."
+    "description": "API for managing contacts and users with CRUD operations and authentication."
   },
   "servers": [
     {
@@ -11,17 +11,85 @@
     }
   ],
   "paths": {
-    "/contacts": {
-      "get": {
-        "summary": "Get all contacts",
+    "/users/register": {
+      "post": {
+        "summary": "Register a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegister"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Validation error or user already exists"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login a user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "List of all contacts",
+            "description": "Login successful, returns JWT token"
+          },
+          "400": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "Get current user profile (requires token)",
+        "responses": {
+          "200": {
+            "description": "User profile returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/contacts": {
+      "get": {
+        "summary": "Get all contacts for authenticated user",
+        "responses": {
+          "200": {
+            "description": "List of user contacts",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/Contact" }
+                  "items": {
+                    "$ref": "#/components/schemas/Contact"
+                  }
                 }
               }
             }
@@ -34,7 +102,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/Contact" }
+              "schema": {
+                "$ref": "#/components/schemas/Contact"
+              }
             }
           }
         },
@@ -43,7 +113,7 @@
             "description": "Contact created successfully"
           },
           "400": {
-            "description": "Bad request – missing or invalid fields"
+            "description": "Validation error"
           }
         }
       }
@@ -56,12 +126,18 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Contact found" },
-          "404": { "description": "Contact not found" }
+          "200": {
+            "description": "Contact found"
+          },
+          "404": {
+            "description": "Contact not found"
+          }
         }
       },
       "put": {
@@ -71,21 +147,31 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/Contact" }
+              "schema": {
+                "$ref": "#/components/schemas/Contact"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "Contact updated successfully" },
-          "400": { "description": "Invalid request body" },
-          "404": { "description": "Contact not found" }
+          "200": {
+            "description": "Contact updated successfully"
+          },
+          "400": {
+            "description": "Invalid request body"
+          },
+          "404": {
+            "description": "Contact not found"
+          }
         }
       },
       "delete": {
@@ -95,48 +181,17 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "204": { "description": "Contact deleted" },
-          "404": { "description": "Contact not found" }
-        }
-      }
-    },
-    "/users": {
-      "get": {
-        "summary": "Get all users",
-        "responses": {
-          "200": {
-            "description": "List of all users",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/User" }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create a new user",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/User" }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "User created successfully"
+          "204": {
+            "description": "Contact deleted"
           },
-          "400": {
-            "description": "Bad request – missing or invalid fields"
+          "404": {
+            "description": "Contact not found"
           }
         }
       }
@@ -149,12 +204,18 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "User found" },
-          "404": { "description": "User not found" }
+          "200": {
+            "description": "User found"
+          },
+          "404": {
+            "description": "User not found"
+          }
         }
       },
       "put": {
@@ -164,21 +225,31 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/User" }
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "User updated successfully" },
-          "400": { "description": "Invalid request body" },
-          "404": { "description": "User not found" }
+          "200": {
+            "description": "User updated successfully"
+          },
+          "400": {
+            "description": "Invalid request body"
+          },
+          "404": {
+            "description": "User not found"
+          }
         }
       },
       "delete": {
@@ -188,21 +259,79 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "204": { "description": "User deleted" },
-          "404": { "description": "User not found" }
+          "204": {
+            "description": "User deleted"
+          },
+          "404": {
+            "description": "User not found"
+          }
         }
       }
     }
   },
   "components": {
     "schemas": {
+      "UserRegister": {
+        "type": "object",
+        "required": [
+          "username",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
       "Contact": {
         "type": "object",
-        "required": ["firstName", "lastName", "email", "favoriteColor", "birthday"],
+        "required": [
+          "firstName",
+          "lastName",
+          "email"
+        ],
         "properties": {
           "firstName": {
             "type": "string"
@@ -216,22 +345,7 @@
           "favoriteColor": {
             "type": "string"
           },
-            "birthday": {
-             "type": "string"
-          }
-        }
-      },
-      "User": {
-        "type": "object",
-        "required": ["username", "email", "role"],
-        "properties": {
-          "username": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "role": {
+          "birthday": {
             "type": "string"
           }
         }

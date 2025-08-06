@@ -1,32 +1,20 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    minlength: 3
-  },
-  email: {
-    type: String,
-    required: true,
-    match: /.+\@.+\..+/,
-    unique: true
-  },
-
-  role: {
-    type: String,
-    enum: ['admin', 'member', 'guest'],
-    default: 'admin'
-  },
-  
-  isActive: {
-    type: Boolean,
-    default: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  name: String,
+  email: { type: String, required: true, unique: true },
+  password: String, // Only for normal signup
+  role: { type: String, default: 'user' }, // e.g., 'admin', 'user'
+  token: String, // For JWT token storage
+  googleId: String
 });
 
 module.exports = mongoose.model('User', userSchema);
+
+
+
+
+
+
+
+
