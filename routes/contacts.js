@@ -3,7 +3,7 @@ const router = express.Router();
 const { verifyToken } = require('../middleware/authMiddleware');
 const contactsController = require('../controllers/contactsController');
 
-// All routes are protected
+// Protect all /contacts routes
 router.use(verifyToken);
 
 // GET all contacts for authenticated user
@@ -15,10 +15,10 @@ router.get('/:id', contactsController.getContactById);
 // POST a new contact
 router.post('/', contactsController.createContact);
 
-// PUT update a contact
+// PUT update a contact by ID
 router.put('/:id', contactsController.updateContactById);
 
-// DELETE a contact
+// DELETE a contact by ID
 router.delete('/:id', contactsController.deleteContactById);
 
 module.exports = router;

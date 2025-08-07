@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -23,7 +24,8 @@ exports.register = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Registration failed', error });
+    console.error('Registration Error:', error);
+    res.status(500).json({ message: 'Registration failed' });
   }
 };
 
@@ -33,8 +35,9 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password)))
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
+    }
 
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
@@ -53,7 +56,8 @@ exports.login = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Login failed', error });
+    console.error('Login Error:', error);
+    res.status(500).json({ message: 'Login failed' });
   }
 };
 
@@ -65,29 +69,36 @@ exports.getme = async (req, res) => {
 
     res.status(200).json({
       id: user._id,
-      username: user.name,
+      username: user.username,
       email: user.email,
       role: user.role
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching profile', error });
+    console.error('GetMe Error:', error);
+    res.status(500).json({ message: 'Error fetching profile' });
   }
 };
 
 // GET /users
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password'); // excluding sensitive fields
+    const users = await User.find().select('-password');
     res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    console.error('Get All Users Error:', error);
+    res.status(500).json({ message: 'Error fetching users' });
   }
 };
 
 // GET /users/:id
 exports.getUserById = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid user ID format' });
+  }
+
   try {
-    const user = await User.findById(req.params.id).select('-password');
+    const user = await User.findById(id).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.status(200).json({
@@ -97,17 +108,24 @@ exports.getUserById = async (req, res) => {
       role: user.role
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user', error });
+    console.error('Get User By ID Error:', error);
+    res.status(500).json({ message: 'Error fetching user' });
   }
 };
 
 // PUT /users/:id
 exports.updateUserById = async (req, res) => {
-  try {
-    const { username, email, role } = req.body;
+  const { id } = req.params;
+  const { username, email, role } = req.body;
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid user ID format' });
+  }
+
+  try {
+    // Optionally: only allow admins to update `role`
     const user = await User.findByIdAndUpdate(
-      req.params.id,
+      id,
       { username, email, role },
       { new: true, runValidators: true }
     ).select('-password');
@@ -124,18 +142,26 @@ exports.updateUserById = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error updating user', error });
+    console.error('Update User Error:', error);
+    res.status(500).json({ message: 'Error updating user' });
   }
 };
 
 // DELETE /users/:id
 exports.deleteUserById = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid user ID format' });
+  }
+
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findByIdAndDelete(id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting user', error });
+    console.error('Delete User Error:', error);
+    res.status(500).json({ message: 'Error deleting user' });
   }
 };
