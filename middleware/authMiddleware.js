@@ -1,18 +1,29 @@
-
 const jwt = require('jsonwebtoken');
 
-exports.verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
+const SECRET = process.env.JWT_SECRET || 'a-string-secret-at-least-256-bits-long';
 
-  if (!token) {
-    return res.status(401).json({ message: 'Access denied. No token provided.' });
+function generateToken(payload, expiresIn = '1h') {
+  return jwt.sign(payload, SECRET, { expiresIn });
+}
+
+function verifyToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Missing or invalid token' });
   }
+
+  const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, SECRET);
     req.user = decoded;
     next();
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid token.' });
+  } catch (err) {
+    return res.status(401).json({ message: 'Invalid token', error: err.message });
   }
+}
+
+module.exports = {
+  generateToken,
+  verifyToken,
 };

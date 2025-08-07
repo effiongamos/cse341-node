@@ -70,18 +70,6 @@
         "bearerAuth": []
       }
     ],
-    "parameters": [
-      {
-        "name": "Authorization",
-        "in": "header",
-        "description": "Bearer access token",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "example": "Bearer eyJhbGciOiJIUzI1NiIsInR..."
-        }
-      }
-    ],
     "responses": {
       "200": {
         "description": "User profile returned",
