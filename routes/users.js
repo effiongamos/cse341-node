@@ -11,7 +11,9 @@ router.post('/login', userscontroller.login);
 // Protected route (example)
 const { verifyToken } = require('../middleware/authMiddleware');
 router.get('/me', verifyToken, userscontroller.getme);
-
+router.get('/:id', verifyToken, userscontroller.getUserById);
+router.put('/:id', verifyToken, userscontroller.updateUserById);
+router.delete('/:id', verifyToken, userscontroller.deleteUserById);
 
 // Add this route to list users (optional – maybe protected)
 router.get('/', verifyToken, userscontroller.getAllUsers);

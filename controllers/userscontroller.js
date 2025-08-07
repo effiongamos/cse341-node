@@ -102,7 +102,7 @@ exports.getUserById = async (req, res) => {
 };
 
 // PUT /users/:id
-exports.updateUser = async (req, res) => {
+exports.updateUserById = async (req, res) => {
   try {
     const { username, email, role } = req.body;
 
@@ -129,7 +129,7 @@ exports.updateUser = async (req, res) => {
 };
 
 // DELETE /users/:id
-exports.deleteUser = async (req, res) => {
+exports.deleteUserById = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
