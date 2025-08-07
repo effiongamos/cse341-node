@@ -2,14 +2,16 @@ const jwt = require('jsonwebtoken');
 
 const SECRET = process.env.JWT_SECRET || 'a-string-secret-at-least-256-bits-long';
 
+//  Generate JWT
 function generateToken(payload, expiresIn = '1h') {
   return jwt.sign(payload, SECRET, { expiresIn });
 }
 
+//  Verify JWT Middleware
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: ' Aceess Denied. Missing or invalid token' });
+    return res.status(401).json({ message: 'Access Denied. Missing or invalid token' });
   }
 
   const token = authHeader.split(' ')[1];
