@@ -1,19 +1,19 @@
 const Contact = require('../models/contact');
 
 // GET /contacts - Get all contacts for the authenticated user
-exports.getContacts = async (req, res) => {
-  try {
-    const contacts = await Contact.find({ userId: req.user.id });
-    res.json(contacts);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error while fetching contacts' });
-  }
-};
+
 
 // GET /contacts/:id - Get a single contact by ID (only if belongs to user)
 exports.getContactById = async (req, res) => {
+  const { id } = req.params;
+
+  // Optional: Validate ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid contact ID format' });
+  }
+
   try {
-    const contact = await Contact.findOne({ _id: req.params.id, userId: req.user.id });
+    const contact = await Contact.findOne({ _id: id, userId: req.user.id });
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
@@ -45,12 +45,19 @@ exports.createContact = async (req, res) => {
 };
 
 // PUT /contacts/:id - Update an existing contact
-exports.updateContact = async (req, res) => {
+exports.updateContactById = async (req, res) => {
+  const { id } = req.params;
+
+  // Optional but recommended: Validate Mongo ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid contact ID format' });
+  }
+
   try {
     const { firstName, lastName, email, favoriteColor, birthday } = req.body;
 
     const contact = await Contact.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user.id },
+      { _id: id, userId: req.user.id }, // filter by both ID and ownership
       { firstName, lastName, email, favoriteColor, birthday },
       { new: true }
     );
@@ -66,7 +73,7 @@ exports.updateContact = async (req, res) => {
 };
 
 // DELETE /contacts/:id - Delete a contact
-exports.deleteContact = async (req, res) => {
+exports.deleteContactById = async (req, res) => {
   try {
     const contact = await Contact.findOneAndDelete({
       _id: req.params.id,
