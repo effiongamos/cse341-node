@@ -9,7 +9,7 @@ function generateToken(payload, expiresIn = '1h') {
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Missing or invalid token' });
+    return res.status(401).json({ message: ' Aceess Denied. Missing or invalid token' });
   }
 
   const token = authHeader.split(' ')[1];
