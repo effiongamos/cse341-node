@@ -4,11 +4,12 @@ const Contact = require('../models/contact');
 // GET /contacts - Get all contacts for the authenticated user
 exports.getContacts = async (req, res) => {
   try {
-    const userId = mongoose.Types.ObjectId(req.user.id);
-    const contacts = await Contact.find({ userId });
-    res.json(contacts);
+    console.log('Authenticated user:', req.user); // Optional for debugging
+    const contacts = await Contact.find({ userId: req.user.id });
+    res.status(200).json(contacts);
   } catch (error) {
-    res.status(500).json({ message: 'Server error while fetching contacts', error });
+    console.error('Error fetching contacts:', error);
+    res.status(500).json({ message: 'Server error while fetching contacts', error: error.message });
   }
 };
 
@@ -27,7 +28,8 @@ exports.getContactById = async (req, res) => {
     }
     res.json(contact);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching contact', error });
+    console.error('Error fetching contact by ID:', error);
+    res.status(500).json({ message: 'Error fetching contact', error: error.message });
   }
 };
 
@@ -48,7 +50,8 @@ exports.createContact = async (req, res) => {
     await contact.save();
     res.status(201).json(contact);
   } catch (error) {
-    res.status(500).json({ message: 'Error adding contact', error });
+    console.error('Error creating contact:', error);
+    res.status(500).json({ message: 'Error adding contact', error: error.message });
   }
 };
 
@@ -75,15 +78,22 @@ exports.updateContactById = async (req, res) => {
 
     res.json(contact);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating contact', error });
+    console.error('Error updating contact:', error);
+    res.status(500).json({ message: 'Error updating contact', error: error.message });
   }
 };
 
 // DELETE /contacts/:id - Delete a contact
 exports.deleteContactById = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid contact ID format' });
+  }
+
   try {
     const contact = await Contact.findOneAndDelete({
-      _id: req.params.id,
+      _id: id,
       userId: req.user.id,
     });
 
@@ -93,6 +103,7 @@ exports.deleteContactById = async (req, res) => {
 
     res.json({ message: 'Contact deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting contact', error });
+    console.error('Error deleting contact:', error);
+    res.status(500).json({ message: 'Error deleting contact', error: error.message });
   }
 };
