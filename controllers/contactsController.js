@@ -4,7 +4,8 @@ const Contact = require('../models/contact');
 // GET /contacts - Get all contacts for the authenticated user
 exports.getContacts = async (req, res) => {
   try {
-    const contacts = await Contact.find({ userId: req.user.id });
+    const userId = mongoose.Types.ObjectId(req.user.id);
+    const contacts = await Contact.find({ userId });
     res.json(contacts);
   } catch (error) {
     res.status(500).json({ message: 'Server error while fetching contacts', error });
