@@ -208,6 +208,30 @@
         }
       }
     },
+    "/contacts": {
+      "get": {
+        "summary": "Get all contacts for authenticated user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of user contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Contact"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "summary": "Create a new contact",
         "security": [
@@ -235,30 +259,6 @@
         }
       }
     },
-    "/contacts": {
-      "get": {
-        "summary": "Get all contacts for authenticated user",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of user contacts",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Contact"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
     "/contacts/{id}": {
       "get": {
         "summary": "Get contact by ID",
